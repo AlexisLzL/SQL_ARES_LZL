@@ -188,9 +188,13 @@ class BuhoRacionalDump:
                  self.config['log_callback']("ERROR", f"Req Failed: {e}")
             return None, False
 
-    def count_records(self, db, table):
+    def count_records(self, db, table, where_clause=None):
         """Cuenta el total de registros en una tabla específica"""
-        query = f"SELECT COUNT(*) FROM {db}.{table}"
+        base_target = f"{db}.{table}"
+        if where_clause:
+            base_target += f" WHERE {where_clause}"
+            
+        query = f"SELECT COUNT(*) FROM {base_target}"
         val, _ = self._make_request(query)
         if val and val.isdigit():
             return int(val)
