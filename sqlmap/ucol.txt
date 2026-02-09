@@ -1,0 +1,17 @@
+GET /sistemaalumnos/Recibos/Recibo/ReimpresionRecibos?Ref=A1322021667259664330&tipo=4 HTTP/1.1
+Host: siceuc2.ucol.mx
+Cookie: __RequestVerificationToken_L3Npc3RlbWFhbHVtbm9z0=dQwcN64vfJjhdosaSoLvrfNtAhCDB3T4DTWx3HzupFYHQwi81h_pMbpa_pmooAcs9Am-MgPD0JqRKx91X7nn2NI1H6W4b6AnfLynFx_c03Q1; ASP.NET_SessionId=tmpw0krymm41q2zhfyjbqkty
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://siceuc2.ucol.mx/sistemaalumnos/Recibos/Recibo
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+Connection: keep-alive
+

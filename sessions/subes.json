@@ -1,0 +1,16 @@
+{
+    "url": "https://subes.becasbenitojuarez.gob.mx/class/perfil/selects.php",
+    "host": "subes.becasbenitojuarez.gob.mx",
+    "cookies": "PHPSESSID=55aj0tp7241hlabn08p1hvpi5a; sto-id-47873-Pool-SUBES=FBIDBHKMFAAA; _ga_HPRYEXEF25=GS2.1.s1770593532$o1$g0$t1770593692$j60$l0$h0; _ga=GA1.3.1768993372.1770593532; _gid=GA1.3.57041770.1770593533; _gat=1",
+    "referer": "https://subes.becasbenitojuarez.gob.mx/perfil/informacion_domicilio/",
+    "user_agent": "Random",
+    "tamper": "space2comment",
+    "delay": 1.0,
+    "raw_input": "POST /class/perfil/selects.php HTTP/1.1\nHost: subes.becasbenitojuarez.gob.mx\nCookie: PHPSESSID=55aj0tp7241hlabn08p1hvpi5a; sto-id-47873-Pool-SUBES=FBIDBHKMFAAA; _ga_HPRYEXEF25=GS2.1.s1770593532$o1$g0$t1770593692$j60$l0$h0; _ga=GA1.3.1768993372.1770593532; _gid=GA1.3.57041770.1770593533; _gat=1\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0\nAccept: text/html, */*; q=0.01\nAccept-Language: en-US,en;q=0.9\nAccept-Encoding: gzip, deflate, br\nContent-Type: application/x-www-form-urlencoded; charset=UTF-8\nX-Requested-With: XMLHttpRequest\nContent-Length: 31\nOrigin: https://subes.becasbenitojuarez.gob.mx\nReferer: https://subes.becasbenitojuarez.gob.mx/perfil/informacion_domicilio/\nSec-Fetch-Dest: empty\nSec-Fetch-Mode: cors\nSec-Fetch-Site: same-origin\nTe: trailers\nConnection: keep-alive\n\ncaso=4&estado=14&selected=14022",
+    "method": "POST",
+    "post_data": {
+        "caso": "4",
+        "estado": "14",
+        "selected": "14022"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "url": "https://subes.becasbenitojuarez.gob.mx/class/perfil/selects.php",
+    "host": "subes.becasbenitojuarez.gob.mx",
+    "cookies": "",
+    "referer": "",
+    "user_agent": "Random",
+    "tamper": "space2comment",
+    "delay": 1.0,
+    "raw_input": "",
+    "method": "POST",
+    "post_data": {
+        "caso": "6",
+        "municipio": "022",
+        "selected": "62123",
+        "estado": "14"
+    }
+}

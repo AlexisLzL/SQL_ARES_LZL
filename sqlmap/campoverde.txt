@@ -1,0 +1,20 @@
+POST /gestion/bolsa_de_trabajo/presenta_datos.asp?tipo=2&lan=es HTTP/2
+Host: colegiocampoverde.edu.mx
+Cookie: ASPSESSIONIDCGDDCACR=MPGJMKDBAOKGDKCPDDDKKAMO
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 787
+Origin: https://colegiocampoverde.edu.mx
+Referer: https://colegiocampoverde.edu.mx/gestion/bolsa_de_trabajo/
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+paterno=DAINEL&materno=MENDOZA&nombre=ALIANZA&ncompleto=&fechan=12%2F12%2F2002&estados=10&municipio=1&colonia=LOS+PAMOS&domicilio=ALIANOEL+23&telefono=523142098822&celular=523142299900&correo=alianza1231231d%40gmail.com&sexo=1&nacionalidad=1&cuenta_facebook=ninguna&formacion=4&etiqueta_carrera=%C2%BFCu%C3%A1l+carrera+t%C3%A9cnica%3F&escondido_2=&etiqueta_carrera_2=&escondido=&titulado=2&Colima=1&Primaria=2&Preparatoria=4&area=&descripcion=&experiencia=1&ref_empresa2=LOS+GAVILANES&anios_exp=1&ref_nombre2=CORONEL+SANDLER&ref_puesto2=EL+JEFE&ref_telefono2=523132098822&ref_correo2=coronelsandler%40gmail.com&labora_empresa=1&motivo_separacion_empresa=&ref_nombre1=SANDLER+RODRIGO&ref_domicilio1=LOS+PATOS&ref_telefono1=523129029988&ref_correo1=coronelsandler%40gmail.com&button=Enviar
