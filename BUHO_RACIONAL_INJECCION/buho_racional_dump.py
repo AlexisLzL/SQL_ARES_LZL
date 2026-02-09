@@ -235,6 +235,8 @@ class BuhoRacionalDump:
         """Extrae un dato largo pedazo a pedazo"""
         full_data = ""
         pos = 1
+        found_any = False
+        
         while True:
             # MySQL SUBSTRING start at 1
             # Extraer 30 caracteres
@@ -243,7 +245,8 @@ class BuhoRacionalDump:
             
             if not val: 
                 break
-                
+            
+            found_any = True
             full_data += val
             
             # Si el pedazo es menor que el tamaño pedido, es el final
@@ -254,7 +257,7 @@ class BuhoRacionalDump:
             # Safety break para evitar bucles infinitos en errores
             if pos > 10000: break 
             
-        return full_data
+        return full_data if found_any else None
 
     def smart_dump(self, query_col, query_table, entity_type="generic", progress_callback=None, start_offset=0, limit=None, force_single=False, known_total=None):
         """
