@@ -300,17 +300,29 @@ class BuhoRacionalDump:
             target_count = total_count - offset
             
         # Bucle de extracción
-        # Condición: No superar el límite solicitado Y no superar el total real
-        while len(results) < target_count and offset < total_count:
+        # Condición: No superar el límite solicitado.
+        # Eliminamos la condición estricta 'offset < total_count' si hay límite explícito
+        # para evitar paradas prematuras si total_count está mal estimado.
+        while len(results) < target_count:
+            if offset >= total_count and limit is None:
+                 # Si no hay límite explícito y nos pasamos del total, paramos.
+                 # Pero si HAY límite, seguimos intentando hasta que la DB no devuelva nada.
+                 break
+            
             if progress_callback:
                 progress_callback(len(results), target_count, f"Batch size: {batch_size}")
             
             # Ajustar lote al remanente
             remaining = target_count - len(results)
-            # También asegurarse de no pasarse del total de la tabla
-            remaining_in_table = total_count - offset
+            # También asegurarse de no pasarse del total de la tabla (solo si confiamos en total)
+            # Si limit está puesto, ignoramos remaining_in_table para forzar intento
             
-            current_batch = min(batch_size, remaining, remaining_in_table)
+            if limit is not None:
+                current_batch = min(batch_size, remaining)
+            else:
+                remaining_in_table = total_count - offset
+                current_batch = min(batch_size, remaining, remaining_in_table)
+
             if current_batch <= 0: break
             
             # Query de Lote
