@@ -259,7 +259,7 @@ class BuhoRacionalDump:
             
         return full_data if found_any else None
 
-    def smart_dump(self, query_col, query_table, entity_type="generic", progress_callback=None, start_offset=0, limit=None, force_single=False, known_total=None):
+    def smart_dump(self, query_col, query_table, entity_type="generic", progress_callback=None, start_offset=0, limit=None, force_single=False, known_total=None, user_batch_size=None):
         """
         Algoritmo Maestro de Extracción (Generador):
         Yields (batch_results, total_count, current_batch_size)
@@ -269,6 +269,8 @@ class BuhoRacionalDump:
             total_count = known_total
             if force_single:
                 batch_size = 1
+            elif user_batch_size:
+                batch_size = user_batch_size
             else:
                 batch_size = self._get_optimal_batch_size(total_count, entity_type)
             mode_blind = False
@@ -290,6 +292,8 @@ class BuhoRacionalDump:
                 total_count = int(total_str)
                 if force_single:
                     batch_size = 1
+                elif user_batch_size:
+                    batch_size = user_batch_size
                 else:
                     batch_size = self._get_optimal_batch_size(total_count, entity_type)
                 mode_blind = False
