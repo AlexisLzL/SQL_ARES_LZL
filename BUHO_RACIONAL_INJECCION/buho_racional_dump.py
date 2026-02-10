@@ -232,32 +232,44 @@ class BuhoRacionalDump:
         return 1
 
     def _extract_chunked(self, query_base, offset_row):
-        """Extrae un dato largo pedazo a pedazo"""
+        """
+        Extrae datos grandes en trozos de 500-1000 chars usando SUBSTRING/MID
+        para evitar truncamiento o timeouts.
+        """
         full_data = ""
         pos = 1
-        found_any = False
         
         while True:
-            # MySQL SUBSTRING start at 1
-            # Extraer 30 caracteres
-            chunk_query = f"SUBSTRING(({query_base} LIMIT 1 OFFSET {offset_row}), {pos}, 30)"
+            # Usar CAST para evitar problemas de codificación binaria en el slice
+            chunk_query = f"SELECT MID(({query_base} LIMIT 1 OFFSET {offset_row}), {pos}, 1000)" 
             val, _ = self._make_request(chunk_query)
             
             if not val: 
+                # Si falla la extracción directa, intentar con CAST explicito a CHAR
+                # Útil para inyecciones donde el resultado es numérico o binario
+                chunk_query_safe = f"SELECT MID(CAST(({query_base} LIMIT 1 OFFSET {offset_row}) AS CHAR), {pos}, 1000)"
+                val, _ = self._make_request(chunk_query_safe)
+                
+            if not val: 
                 break
-            
-            found_any = True
+                
+            # Detectar si devolvió vacío (string vacía) -> Fin de datos
+            if val == "": 
+                break
+                
             full_data += val
             
-            # Si el pedazo es menor que el tamaño pedido, es el final
-            if len(val) < 30: break
+            # Si el pedazo es menor que el tamaño pedido (menos margen), es el final
+            # Margen de seguridad: si pedimos 1000 y llega menos, es que se acabó.
+            if len(val) < 950: break
             
-            pos += 30
+            pos += 1000
             
             # Safety break para evitar bucles infinitos en errores
-            if pos > 10000: break 
+            if pos > 1000000: # Permitir hasta 1MB por celda/lote
+                 break 
             
-        return full_data if found_any else None
+        return full_data if full_data else None
 
     def smart_dump(self, query_col, query_table, entity_type="generic", progress_callback=None, start_offset=0, limit=None, force_single=False, known_total=None, user_batch_size=None):
         """
@@ -344,6 +356,9 @@ class BuhoRacionalDump:
             # En su lugar, hacemos iteración normal si es modo single (ya forzado por alta densidad)
             # O usamos un truco: Si es generic, el dumper ya espera un string largo HEX.
             # Pero si son multiples filas (batch > 1), necesitamos separarlas.
+            
+            # Si user_batch_size está forzado, usamos ese tamaño SIEMPRE, incluso si es generic
+            # Pero necesitamos asegurarnos de usar GROUP_CONCAT para traerlas todas juntas.
             
             if entity_type == "generic" and batch_size == 1:
                  # Si es 1 sola fila, no necesitamos group_concat externo
