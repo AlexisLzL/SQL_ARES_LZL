@@ -407,10 +407,10 @@ class BuhoRacionalDump:
                 else:
                     batch_size = max(1, current_batch // 2)
                 continue 
-                else:
-                    # Lote es 1 y falló -> Dato Largo -> Chunking
-                    if val is None and mode_blind:
-                        break 
+            else:
+                # Lote es 1 y falló -> Dato Largo -> Chunking
+                if val is None and mode_blind:
+                    break 
                     
                     # Intentar Chunking
                     # IMPORTANTE: Si estamos en modo generic HEX, la query base debe ser la misma HEX(...)
